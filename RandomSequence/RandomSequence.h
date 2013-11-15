@@ -48,6 +48,11 @@
                           inRange:(NSRange)range
                        usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block;
 
+- (void)enumerateNumberOfIntegers:(NSInteger)count
+                             from:(NSInteger)from
+                               to:(NSInteger)to
+                       usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block;
+
 @end
 
 

@@ -143,9 +143,32 @@ NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *see
     }
 }
 
+NS_INLINE NSInteger nextIntegerFromToUpdatingSeed(NSInteger from, NSInteger to, uint32_t *seed_p)
+{
+    return floor(nextValueUpdatingSeed(seed_p) * (double)(to - from)) + from;
+}
+
 - (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to
 {
-    return floor(nextValueUpdatingSeed(&_seed) * (double)(to - from)) + from;
+    return nextIntegerFromToUpdatingSeed(from, to, &_seed);
+}
+
+- (void)enumerateNumberOfIntegers:(NSInteger)count
+                             from:(NSInteger)from
+                               to:(NSInteger)to
+                       usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block
+{
+    __block BOOL stop = NO;
+    
+    for (NSInteger i = 0; i < count; i++) {
+        NSInteger idx = nextIntegerFromToUpdatingSeed(from, to, &_seed);
+        
+        block(idx, i, &stop);
+        
+        if (stop) {
+            break;
+        }
+    }
 }
 
 @end
