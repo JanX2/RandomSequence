@@ -44,6 +44,10 @@
 - (NSUInteger)nextIntegerInRange:(NSRange)range;
 - (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to;
 
+- (void)enumerateNumberOfIntegers:(NSUInteger)count
+                          inRange:(NSRange)range
+                       usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block;
+
 @end
 
 

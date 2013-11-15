@@ -117,9 +117,30 @@ NS_INLINE double nextValueUpdatingSeed(uint32_t *seed_p) {
     return nextValueUpdatingSeed(&_seed);
 }
 
+NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *seed_p) {
+    return floor(nextValueUpdatingSeed(seed_p) * (double)range.length) + range.location;
+}
+
 - (NSUInteger)nextIntegerInRange:(NSRange)range
 {
-    return floor(nextValueUpdatingSeed(&_seed) * (double)range.length) + range.location;
+    return nextIntegerInRangeUpdatingSeed(range, &_seed);
+}
+
+- (void)enumerateNumberOfIntegers:(NSUInteger)count
+                          inRange:(NSRange)range
+                       usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block
+{
+    __block BOOL stop = NO;
+    
+    for (NSUInteger i = 0; i < count; i++) {
+        NSUInteger idx = nextIntegerInRangeUpdatingSeed(range, &_seed);
+        
+        block(idx, i, &stop);
+        
+        if (stop) {
+            break;
+        }
+    }
 }
 
 - (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to
