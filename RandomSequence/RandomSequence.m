@@ -94,25 +94,37 @@ static const uint32_t RandomModulus = 233280;
     _seed = seed % RandomModulus;
 }
 
+NS_INLINE double valueForSeed(uint32_t seed) {
+    return (double)seed / (double)RandomModulus;
+}
+
 - (double)value
 {
-    return (double)_seed / (double)RandomModulus;
+    return valueForSeed(_seed);
+}
+
+NS_INLINE void updateSeed(uint32_t *seed_p) {
+    *seed_p = (*seed_p * RandomMultiplier + RandomIncrement) % RandomModulus;
+}
+
+NS_INLINE double nextValueUpdatingSeed(uint32_t *seed_p) {
+    updateSeed(&(*seed_p));
+    return valueForSeed(*seed_p);
 }
 
 - (double)nextValue
 {
-    _seed = (_seed * RandomMultiplier + RandomIncrement) % RandomModulus;
-    return [self value];
+    return nextValueUpdatingSeed(&_seed);
 }
 
 - (NSUInteger)nextIntegerInRange:(NSRange)range
 {
-    return floor([self nextValue] * (double)range.length) + range.location;
+    return floor(nextValueUpdatingSeed(&_seed) * (double)range.length) + range.location;
 }
 
 - (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to
 {
-    return floor([self nextValue] * (double)(to - from)) + from;
+    return floor(nextValueUpdatingSeed(&_seed) * (double)(to - from)) + from;
 }
 
 @end
