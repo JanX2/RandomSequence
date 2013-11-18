@@ -67,6 +67,17 @@ typedef NSUInteger RSEnumerationOptions;
                                to:(NSInteger)to
                        usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block;
 
+- (void)enumerateNumberOfSamples:(NSInteger)count
+                            from:(NSInteger)from
+                              to:(NSInteger)to
+                      usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block;
+
+- (void)enumerateNumberOfIntegers:(NSInteger)count
+                             from:(NSInteger)from
+                               to:(NSInteger)to
+                          options:(RSEnumerationOptions)options
+                       usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block;
+
 @end
 
 

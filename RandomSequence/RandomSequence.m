@@ -39,6 +39,8 @@ static const uint32_t RandomMultiplier = 9301;
 static const uint32_t RandomIncrement = 49297;
 static const uint32_t RandomModulus = 233280;
 
+#define RS_UNSIGNED     0
+#define RS_SIGNED       1
 
 @implementation RandomSequence
 
@@ -151,49 +153,11 @@ NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *see
                           options:(RSEnumerationOptions)options
                        usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block
 {
-    __block BOOL stop = NO;
+#   define INT_TYPE    RS_UNSIGNED
     
-    BOOL countCoversRangeLength = (count >= range.length);
-    
-    NSRange region;
-    double region_length;
-    
-    if (options & RSEnumerationSamples) {
-        region_length = (double)range.length / (double)count;
-        region = NSMakeRange(range.location, NSNotFound);
-    }
-    
-    if (countCoversRangeLength) {
-        count = range.length;
-    }
-    
-    for (NSUInteger i = 0; i < count; i++) {
-        NSUInteger idx;
-        
-        if (options & RSEnumerationSamples) {
-            if (countCoversRangeLength) {
-                // The count covers every integer in range.
-                idx = range.location + i;
-            }
-            else {
-                NSUInteger regionEnd = (region_length * (i + 1)) + 0.5; // Rounding to nearest integer.
-                region.length = regionEnd - region.location;
-                
-                idx = nextIntegerInRangeUpdatingSeed(region, &_seed);
-            }
-            
-            region.location = NSMaxRange(region);
-        }
-        else {
-            idx = nextIntegerInRangeUpdatingSeed(range, &_seed);
-        }
-        
-        block(idx, i, &stop);
-        
-        if (stop) {
-            break;
-        }
-    }
+#   include "RandomSequenceEnumeration.m"
+
+#   undef INT_TYPE
 }
 
 
@@ -212,17 +176,36 @@ NS_INLINE NSInteger nextIntegerFromToUpdatingSeed(NSInteger from, NSInteger to, 
                                to:(NSInteger)to
                        usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block
 {
-    __block BOOL stop = NO;
+    [self enumerateNumberOfIntegers:count
+                               from:from
+                                 to:to
+                            options:0
+                         usingBlock:block];
+}
+
+- (void)enumerateNumberOfSamples:(NSInteger)count
+                            from:(NSInteger)from
+                              to:(NSInteger)to
+                      usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block
+{
+    [self enumerateNumberOfIntegers:count
+                               from:from
+                                 to:to
+                            options:RSEnumerationSamples
+                         usingBlock:block];
+}
+
+- (void)enumerateNumberOfIntegers:(NSInteger)count
+                             from:(NSInteger)from
+                               to:(NSInteger)to
+                          options:(RSEnumerationOptions)options
+                       usingBlock:(void (^)(NSInteger idx, NSInteger serial, BOOL *stop))block
+{
+#   define INT_TYPE    RS_SIGNED
     
-    for (NSInteger i = 0; i < count; i++) {
-        NSInteger idx = nextIntegerFromToUpdatingSeed(from, to, &_seed);
-        
-        block(idx, i, &stop);
-        
-        if (stop) {
-            break;
-        }
-    }
+#   include "RandomSequenceEnumeration.m"
+    
+#   undef INT_TYPE
 }
 
 @end

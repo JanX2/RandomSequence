@@ -40,6 +40,7 @@
 		017712AC14BF92620050C6BC /* RandomSequenceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomSequenceTests.m; sourceTree = "<group>"; };
 		017712AF14BF92D00050C6BC /* TestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestCase.h; path = ../UnitTests/TestCase.h; sourceTree = "<group>"; };
 		017712B014BF92D00050C6BC /* TestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestCase.m; path = ../UnitTests/TestCase.m; sourceTree = "<group>"; };
+		3DD60469183A621900AFA804 /* RandomSequenceEnumeration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomSequenceEnumeration.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +60,7 @@
 			children = (
 				0131F7B0180BE861001DD9F0 /* RandomSequence.h */,
 				0131F7B1180BE861001DD9F0 /* RandomSequence.m */,
+				3DD60469183A621900AFA804 /* RandomSequenceEnumeration.m */,
 			);
 			name = RandomSequence;
 			path = ../RandomSequence;
