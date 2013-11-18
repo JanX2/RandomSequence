@@ -32,6 +32,11 @@
 
 #import <Foundation/Foundation.h>
 
+enum {
+    RSEnumerationSamples =         (1UL << 0),            /* If specified, distributes the integer sequence over the range and enumerates in ascending order. */
+};
+typedef NSUInteger RSEnumerationOptions;
+
 @interface RandomSequence : NSObject <NSCoding, NSCopying>
 
 @property (nonatomic, assign) uint32_t seed;
@@ -51,6 +56,11 @@
 - (void)enumerateNumberOfSamples:(NSUInteger)count
                          inRange:(NSRange)range
                       usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block;
+
+- (void)enumerateNumberOfIntegers:(NSUInteger)count
+                          inRange:(NSRange)range
+                          options:(RSEnumerationOptions)options
+                       usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block;
 
 - (void)enumerateNumberOfIntegers:(NSInteger)count
                              from:(NSInteger)from

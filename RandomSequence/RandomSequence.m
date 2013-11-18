@@ -130,29 +130,38 @@ NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *see
                           inRange:(NSRange)range
                        usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block
 {
-    __block BOOL stop = NO;
-    
-    for (NSUInteger i = 0; i < count; i++) {
-        NSUInteger idx = nextIntegerInRangeUpdatingSeed(range, &_seed);
-        
-        block(idx, i, &stop);
-        
-        if (stop) {
-            break;
-        }
-    }
+    [self enumerateNumberOfIntegers:count
+                            inRange:range
+                            options:0
+                         usingBlock:block];
 }
 
 - (void)enumerateNumberOfSamples:(NSUInteger)count
                          inRange:(NSRange)range
                       usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block
 {
+    [self enumerateNumberOfIntegers:count
+                            inRange:range
+                            options:RSEnumerationSamples
+                         usingBlock:block];
+}
+
+- (void)enumerateNumberOfIntegers:(NSUInteger)count
+                          inRange:(NSRange)range
+                          options:(RSEnumerationOptions)options
+                       usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block
+{
     __block BOOL stop = NO;
     
-    double region_length = (double)range.length / (double)count;
-    NSRange region = NSMakeRange(range.location, NSNotFound);
-    
     BOOL countCoversRangeLength = (count >= range.length);
+    
+    NSRange region;
+    double region_length;
+    
+    if (options & RSEnumerationSamples) {
+        region_length = (double)range.length / (double)count;
+        region = NSMakeRange(range.location, NSNotFound);
+    }
     
     if (countCoversRangeLength) {
         count = range.length;
@@ -161,13 +170,22 @@ NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *see
     for (NSUInteger i = 0; i < count; i++) {
         NSUInteger idx;
         
-        if (countCoversRangeLength) {
-            idx = range.location + i;
-        } else {
-            NSUInteger regionEnd = (region_length * (i + 1)) + 0.5; // Rounding to nearest integer.
-            region.length = regionEnd - region.location;
+        if (options & RSEnumerationSamples) {
+            if (countCoversRangeLength) {
+                // The count covers every integer in range.
+                idx = range.location + i;
+            }
+            else {
+                NSUInteger regionEnd = (region_length * (i + 1)) + 0.5; // Rounding to nearest integer.
+                region.length = regionEnd - region.location;
+                
+                idx = nextIntegerInRangeUpdatingSeed(region, &_seed);
+            }
             
-            idx = nextIntegerInRangeUpdatingSeed(region, &_seed);
+            region.location = NSMaxRange(region);
+        }
+        else {
+            idx = nextIntegerInRangeUpdatingSeed(range, &_seed);
         }
         
         block(idx, i, &stop);
@@ -175,8 +193,6 @@ NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *see
         if (stop) {
             break;
         }
-        
-        region.location = NSMaxRange(region);
     }
 }
 
