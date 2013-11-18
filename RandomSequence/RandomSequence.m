@@ -143,6 +143,44 @@ NS_INLINE NSUInteger nextIntegerInRangeUpdatingSeed(NSRange range, uint32_t *see
     }
 }
 
+- (void)enumerateNumberOfSamples:(NSUInteger)count
+                         inRange:(NSRange)range
+                      usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block
+{
+    __block BOOL stop = NO;
+    
+    double region_length = (double)range.length / (double)count;
+    NSRange region = NSMakeRange(range.location, NSNotFound);
+    
+    BOOL countCoversRangeLength = (count >= range.length);
+    
+    if (countCoversRangeLength) {
+        count = range.length;
+    }
+    
+    for (NSUInteger i = 0; i < count; i++) {
+        NSUInteger idx;
+        
+        if (countCoversRangeLength) {
+            idx = range.location + i;
+        } else {
+            NSUInteger regionEnd = (region_length * (i + 1)) + 0.5; // Rounding to nearest integer.
+            region.length = regionEnd - region.location;
+            
+            idx = nextIntegerInRangeUpdatingSeed(region, &_seed);
+        }
+        
+        block(idx, i, &stop);
+        
+        if (stop) {
+            break;
+        }
+        
+        region.location = NSMaxRange(region);
+    }
+}
+
+
 NS_INLINE NSInteger nextIntegerFromToUpdatingSeed(NSInteger from, NSInteger to, uint32_t *seed_p)
 {
     return floor(nextValueUpdatingSeed(seed_p) * (double)(to - from)) + from;
