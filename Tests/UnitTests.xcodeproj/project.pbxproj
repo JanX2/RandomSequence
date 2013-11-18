@@ -75,6 +75,7 @@
 				0177128E14BF91160050C6BC /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		0177128E14BF91160050C6BC /* Products */ = {
 			isa = PBXGroup;
