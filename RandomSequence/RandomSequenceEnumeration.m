@@ -7,6 +7,7 @@
 //
 
 // WARNING: If you want to debug this, you will have to copy the code, replacing the #include in the other file. LLDB can’t deal with metaprogramming doen this way. GDB could…
+// NOTE: You don’t need to add this file to your target, as it is included directly and not linked as an object file referenced by a header file.
 
 #ifdef INT_TYPE
 
