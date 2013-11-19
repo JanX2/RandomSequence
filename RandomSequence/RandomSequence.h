@@ -80,6 +80,11 @@ typedef NSUInteger RSEnumerationOptions;
 
 @end
 
+@interface RandomSequence (Testing)
+
++ (uint32_t)randomModulus;
+
+@end
 
 @interface NSArray (RandomSequence)
 

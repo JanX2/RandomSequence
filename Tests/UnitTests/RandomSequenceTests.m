@@ -49,6 +49,24 @@
     NSAssert([values isEqualToArray:compare], @"Consistency test failed");
 }
 
+- (void)testEdgeCases
+{
+    uint32_t randomModulus = [RandomSequence randomModulus];
+    double value;
+    
+    RandomSequence *sequence = [RandomSequence sequenceWithSeed:0];
+    value = sequence.value;
+    NSAssert(value == 0.0, @"Edge Case test #1 failed");
+
+    sequence.seed = randomModulus;
+    value = sequence.value;
+    NSAssert(value == 0.0, @"Edge Case test #2 failed");
+    
+    sequence.seed = randomModulus-1;
+    value = sequence.value;
+    NSAssert(value < 1.0, @"Edge Case test #3 failed");
+}
+
 - (void)testEnumeration
 {
     RandomSequence *sequence = [RandomSequence sequenceWithSeed:123456];

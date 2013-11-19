@@ -91,6 +91,11 @@ static const uint32_t RandomModulus = 233280;
     return sequence;
 }
 
++ (uint32_t)randomModulus
+{
+    return RandomModulus;
+}
+
 - (void)setSeed:(uint32_t)seed
 {
     _seed = seed % RandomModulus;
