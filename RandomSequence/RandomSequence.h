@@ -44,10 +44,10 @@ typedef NSUInteger RSEnumerationOptions;
 + (instancetype)defaultSequence;
 + (instancetype)sequenceWithSeed:(uint32_t)seed;
 
-- (double)value;
+- (double)value; // 0.0 <= value < 1.0. value can never reach 1.0!
 - (double)nextValue;
-- (NSUInteger)nextIntegerInRange:(NSRange)range;
-- (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to;
+- (NSUInteger)nextIntegerInRange:(NSRange)range; // returns an integer i with NSLocationInRange(i, range) == YES
+- (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to; // returns an integer i with from <= i < to
 
 - (void)enumerateNumberOfIntegers:(NSUInteger)count
                           inRange:(NSRange)range
