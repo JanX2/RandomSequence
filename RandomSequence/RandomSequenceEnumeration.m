@@ -6,6 +6,8 @@
 //
 //
 
+// WARNING: If you want to debug this, you will have to copy the code, replacing the #include in the other file. LLDB can’t deal with metaprogramming doen this way. GDB could…
+
 #ifdef INT_TYPE
 
 #if (INT_TYPE == RS_UNSIGNED)
