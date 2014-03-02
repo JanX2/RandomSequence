@@ -65,7 +65,7 @@ static const uint32_t RandomModulus = 233280;
 {
     if ((self = [super init]))
     {
-        _seed = arc4random() % RandomModulus;
+        _seed = arc4random_uniform(RandomModulus);
     }
     return self;
 }
