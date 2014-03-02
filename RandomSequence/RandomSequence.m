@@ -5,11 +5,14 @@
 //
 //  Created by Nick Lockwood on 25/02/2012.
 //  Copyright (c) 2012 Charcoal Design
+//  Copyright (c) 2014 Jan Weiß
 //
 //  Distributed under the permissive zlib License
 //  Get the latest version from here:
 //
 //  https://github.com/nicklockwood/RandomSequence
+//  Custom fork with block enumeration:
+//  https://github.com/janx2/RandomSequence
 //
 //  This software is provided 'as-is', without any express or implied
 //  warranty.  In no event will the authors be held liable for any damages
