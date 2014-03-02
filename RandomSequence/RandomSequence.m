@@ -32,6 +32,7 @@
 
 #import "RandomSequence.h"
 
+#import <tgmath.h>
 
 static NSString *const SeedPropertyKey = @"seed";
 
