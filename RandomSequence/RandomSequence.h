@@ -65,6 +65,7 @@ typedef NSUInteger RSEnumerationOptions;
                           options:(RSEnumerationOptions)options
                        usingBlock:(void (^)(NSUInteger idx, NSUInteger serial, BOOL *stop))block;
 
+// from <= idx < to
 - (void)enumerateNumberOfIntegers:(NSInteger)count
                              from:(NSInteger)from
                                to:(NSInteger)to
